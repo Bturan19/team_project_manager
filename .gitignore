@@ -1,0 +1,23 @@
+# Ignore Python cache and compiled files  
+__pycache__/  
+*.py[cod]  
+  
+# Ignore virtual environments  
+venv/  
+env/  
+.venv/  
+  
+# Ignore secrets and configuration files  
+.secrets.toml  
+.screts.yaml  
+secrets.toml  
+screts.yaml  
+.streamlit/secrets.toml  
+.streamlit/screts.yaml  
+  
+# Ignore other files you don't want to commit  
+.DS_Store  
+
+# DB
+.db
+*.db
