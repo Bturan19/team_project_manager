@@ -23,21 +23,21 @@ st.set_page_config(page_title="Team Project Manager", layout='wide')
 # --- User Authentication ---  
 def main():  
     # Load configuration from YAML file  
-    with open('.streamlit/screts.yaml') as file:  
-        config = yaml.load(file, Loader=SafeLoader)  
+    # with open('.streamlit/screts.yaml') as file:  
+    #     config = yaml.load(file, Loader=SafeLoader)  
 
-    # Make a deepcopy of the credentials to make it mutable  
-    credentials = copy.deepcopy(config['credentials'])  
+    # # Make a deepcopy of the credentials to make it mutable  
+    # credentials = copy.deepcopy(config['credentials'])  
 
-    # Create the authenticator object  
-    authenticator = stauth.Authenticate(  
-        credentials=credentials,  
-        cookie_name=config['cookie']['name'],  
-        key=config['cookie']['key'],  
-        cookie_expiry_days=config['cookie']['expiry_days'],  
-        preauthorized=config.get('preauthorized'),  
-        prehashed=True  # Set to True if passwords are pre-hashed  
-    ) 
+    # # Create the authenticator object  
+    # authenticator = stauth.Authenticate(  
+    #     credentials=credentials,  
+    #     cookie_name=config['cookie']['name'],  
+    #     key=config['cookie']['key'],  
+    #     cookie_expiry_days=config['cookie']['expiry_days'],  
+    #     preauthorized=config.get('preauthorized'),  
+    #     prehashed=True  # Set to True if passwords are pre-hashed  
+    # ) 
   
     # Render the login widget  
     #name, authentication_status, username = authenticator.login(location='main')  
@@ -51,7 +51,10 @@ def main():
 
     # if st.session_state['authentication_status']:
     #     run_app('turan')
-    authenticator.login(key='Login', location='main')
+    #authenticator.login(key='Login', location='main')
+    st.session_state['authentication_status']==True
+    st.session_state['name'] = "Turan"
+
     if st.session_state['authentication_status']==True:  
         st.sidebar.success(f"Welcome {st.session_state['name']}!")  
         run_app(st.session_state['name'])  
