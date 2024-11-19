@@ -52,7 +52,7 @@ def main():
     # if st.session_state['authentication_status']:
     #     run_app('turan')
     #authenticator.login(key='Login', location='main')
-    st.session_state['authentication_status']==True
+    st.session_state['authentication_status']=True
     st.session_state['name'] = "Turan"
 
     if st.session_state['authentication_status']==True:  
