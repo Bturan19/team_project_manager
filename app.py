@@ -434,6 +434,7 @@ def run_app(name):
                 project_selection = st.selectbox("Filter by Project", project_options)
                 if project_selection != "All Projects":
                     project_id = projects_df.loc[projects_df['name'] == project_selection, 'id'].values[0]
+                    project_id = int(project_id) 
                     entries_df = entries_df[entries_df['project_id'] == project_id]
                 for index, entry in entries_df.iterrows():
                     with st.expander(entry['title'], expanded=False):
@@ -451,6 +452,7 @@ def run_app(name):
                     st.stop()
                 project_selection = st.selectbox("Assign to Project", project_options)
                 project_id = projects_df.loc[projects_df['name'] == project_selection, 'id'].values[0]
+                project_id = int(project_id) 
                 tags = st.text_input("Tags (comma-separated)")
                 content = st.text_area("Content (Markdown Supported)")
                 submit = st.form_submit_button("Add Entry")
