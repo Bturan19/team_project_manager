@@ -1,61 +1,56 @@
-# src/models.py  
-import sqlite3  
-from src.db import get_connection  
+from sqlalchemy import text  
+from src.db import get_engine  
   
 def initialize_database():  
-    conn = get_connection()  
-    c = conn.cursor()  
+    engine = get_engine()  
+    with engine.begin() as conn:  
+        # Create projects table  
+        conn.execute(text('''  
+            CREATE TABLE IF NOT EXISTS projects (  
+                id SERIAL PRIMARY KEY,  
+                name VARCHAR(255) NOT NULL UNIQUE,  
+                description TEXT,  
+                start_date DATE,  
+                estimated_end_date DATE,  
+                color VARCHAR(10),  
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
+            );  
+        '''))  
   
-    # Update the projects table to include start_date and estimated_end_date  
-    c.execute('''  
-    CREATE TABLE IF NOT EXISTS projects (  
-        id INTEGER PRIMARY KEY AUTOINCREMENT,  
-        name TEXT NOT NULL UNIQUE,  
-        description TEXT,  
-        start_date DATE,  
-        estimated_end_date DATE,  
-        color TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
-    )  
-    ''')  
+        # Create sprints table  
+        conn.execute(text('''  
+            CREATE TABLE IF NOT EXISTS sprints (  
+                id SERIAL PRIMARY KEY,  
+                name VARCHAR(255) NOT NULL,  
+                start_date DATE,  
+                end_date DATE,  
+                is_active BOOLEAN DEFAULT TRUE,  
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
+            );  
+        '''))  
   
-    # Remove project_id from sprints table  
-    c.execute('''  
-    CREATE TABLE IF NOT EXISTS sprints (  
-        id INTEGER PRIMARY KEY AUTOINCREMENT,  
-        name TEXT NOT NULL,  
-        start_date DATE,  
-        end_date DATE,  
-        is_active INTEGER DEFAULT 1,  
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
-    )  
-    ''')  
+        # Create tasks table  
+        conn.execute(text('''  
+            CREATE TABLE IF NOT EXISTS tasks (  
+                id SERIAL PRIMARY KEY,  
+                title VARCHAR(255) NOT NULL,  
+                description TEXT,  
+                status VARCHAR(50) NOT NULL,  
+                tags TEXT,  
+                project_id INTEGER REFERENCES projects(id),  
+                sprint_id INTEGER REFERENCES sprints(id),  
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
+            );  
+        '''))  
   
-    c.execute('''  
-    CREATE TABLE IF NOT EXISTS tasks (  
-        id INTEGER PRIMARY KEY AUTOINCREMENT,  
-        title TEXT NOT NULL,  
-        description TEXT,  
-        status TEXT NOT NULL,  
-        tags TEXT,  
-        project_id INTEGER,  
-        sprint_id INTEGER,  
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
-        FOREIGN KEY (project_id) REFERENCES projects (id),  
-        FOREIGN KEY (sprint_id) REFERENCES sprints (id)  
-    )  
-    ''')  
-  
-    c.execute('''  
-    CREATE TABLE IF NOT EXISTS knowledge_base (  
-        id INTEGER PRIMARY KEY AUTOINCREMENT,  
-        title TEXT NOT NULL,  
-        content TEXT NOT NULL,  
-        tags TEXT,  
-        project_id INTEGER,  
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
-        FOREIGN KEY (project_id) REFERENCES projects (id)  
-    )  
-    ''')  
-    conn.commit()  
-    conn.close()  
+        # Create knowledge_base table  
+        conn.execute(text('''  
+            CREATE TABLE IF NOT EXISTS knowledge_base (  
+                id SERIAL PRIMARY KEY,  
+                title VARCHAR(255) NOT NULL,  
+                content TEXT NOT NULL,  
+                tags TEXT,  
+                project_id INTEGER REFERENCES projects(id),  
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
+            );  
+        '''))  
