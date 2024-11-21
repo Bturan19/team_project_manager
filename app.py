@@ -204,12 +204,22 @@ def run_app(name):
                     tags = st.text_input("Tags (comma-separated)", value=task_to_edit['tags'])  
                     # Project selection  
                     project_options = projects_df['name'].tolist()  
-                    project_selection = st.selectbox("Assign to Project", project_options, index=project_options.index(project_selection))  
-                    project_id = int(projects_df.loc[projects_df['name'] == project_selection, 'id'].values[0])  
+                    current_project_name = task_to_edit['project_name']  
+                    if current_project_name in project_options:  
+                        project_index = project_options.index(current_project_name)  
+                    else:  
+                        project_index = 0  # Default to first project if not found
+                    project_selection = st.selectbox("Assign to Project", project_options, index=project_index)  
+                    project_id = int(projects_df.loc[projects_df['name'] == project_selection, 'id'].values[0]) 
                     # Sprint selection  
                     active_sprints = sprint.get_all_sprints(active_only=True)  
                     sprint_options = ["None"] + active_sprints['name'].tolist()  
-                    sprint_selection = st.selectbox("Assign to Sprint", sprint_options)  
+                    current_sprint_name = task_to_edit['sprint_name'] if task_to_edit['sprint_name'] else "None"  
+                    if current_sprint_name in sprint_options:  
+                        sprint_index = sprint_options.index(current_sprint_name)  
+                    else:  
+                        sprint_index = 0  # Default to "None" if not found  
+                    sprint_selection = st.selectbox("Assign to Sprint", sprint_options, index=sprint_index)  
                     sprint_id = None  
                     if sprint_selection != "None":  
                         sprint_id = int(active_sprints.loc[active_sprints['name'] == sprint_selection, 'id'].values[0])  
