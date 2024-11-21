@@ -330,8 +330,8 @@ def run_app(name):
                     line_width=2,
                     line_dash="dash",
                     line_color="red",
-                    annotation_text="Today",
-                    annotation_position="top"
+                    annotation_text="Today"
+                    # Removed annotation_position to avoid the error
                 )
                 fig.update_yaxes(autorange="reversed")  # Reverse the y-axis to have the first project at the top  
                 fig.update_layout(showlegend=False)  # Hide legend if desired  
