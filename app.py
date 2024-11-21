@@ -326,7 +326,7 @@ def run_app(name):
                 )
                 # Add vertical line for today's date
                 fig.add_vline(
-                    x=pd.to_datetime('today').normalize(),
+                    x=pd.to_datetime('today').normalize().to_pydatetime(),
                     line_width=2,
                     line_dash="dash",
                     line_color="red",
