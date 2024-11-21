@@ -323,7 +323,16 @@ def run_app(name):
                     color='Project',  # Color by project name  
                     color_discrete_map={row['name']: row['color'] for _, row in projects_df.iterrows()},  
                     title="Project Timeline"  
-                )  
+                )
+                # Add vertical line for today's date
+                fig.add_vline(
+                    x=pd.Timestamp.now(),
+                    line_width=2,
+                    line_dash="dash",
+                    line_color="red",
+                    annotation_text="Today",
+                    annotation_position="top"
+                )
                 fig.update_yaxes(autorange="reversed")  # Reverse the y-axis to have the first project at the top  
                 fig.update_layout(showlegend=False)  # Hide legend if desired  
                 st.plotly_chart(fig)   
