@@ -128,6 +128,19 @@ def run_app(name):
                 if filtered_tasks.empty:  
                     st.info(f"No tasks found for the selected sprint.")  
                 else:  
+                    # --- Add Download Button Here ---  
+                    # Convert the filtered tasks DataFrame to CSV string  
+                    csv_data = filtered_tasks.to_csv(index=False)  
+    
+                    # Add a download button  
+                    st.download_button(  
+                        label="Download Tasks as CSV",  
+                        data=csv_data,  
+                        file_name="tasks.csv",  
+                        mime="text/csv"  
+                    )  
+                    # --- End of Download Button Section --- 
+                    
                     # Implement the Board View  
                     st.write(f"### Tasks for Project: {project_selection}, Sprint: {sprint_selection}")  
                     statuses = ["To Do", "In Progress", "Review", "Done"]  
